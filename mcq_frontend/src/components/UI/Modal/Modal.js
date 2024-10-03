@@ -1,12 +1,14 @@
 import React from 'react'
 import './Modal.css'
 
-const Modal = ({ children }) => {
-
+const Modal = ({ show, handleShow, children, backGround }) => {
+    if (!show) {
+        return null
+    }
 
     return (
-        <div className='backdrop' >
-            <div className='modal'>{children}</div>
+        <div className='backdrop' onClick={handleShow}>
+            <div style={{ backgroundColor: backGround }} className='modal' onClick={(e) => e.stopPropagation()}>{children}</div>
         </div >
     )
 

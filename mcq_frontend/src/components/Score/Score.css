@@ -1,0 +1,29 @@
+.score-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 130px;
+    padding-left: 130px;
+
+}
+
+.score {
+    font-size: 100px;
+    margin: 0px;
+    font-family: 'valorax';
+    color: rgba(100, 300, 100)
+}
+
+.player1 {
+    color: green
+}
+
+.player2 {
+    color: red
+}
+
+.score-text {
+    font-size: 50px;
+    margin: 0px;
+}

@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'supreme';
+    src: url('../../assets/fonts/SUPREMESPIKE-KVO8D.OTF') format('opentype')
+}
+
+.start-form {}
+
+.name-label {
+    display: flex;
+    /* font-size: 100px; */
+    font-family: 'supreme';
+    font-size: 20px;
+    padding: 10px 10px;
+    align-items: center;
+    /* color: white */
+}
+
+.game-name {
+    padding: 10px 10px;
+    margin: 10px 10px;
+    font-family: 'supreme';
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 3px solid transparent;
+    transition: border-color 0.3s ease;
+    outline: none;
+
+}
+
+.game-name:focus {
+    border-color: rgba(0, 0, 0, 0.5);
+    /* background-color: blue; */
+}
+
+.game-start-button {
+    margin: 10px 10px;
+    font-family: 'valorax';
+    cursor: pointer;
+    padding: 7px 9px;
+    border-radius: 10px;
+    border: 3px solid transparent;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.game-start-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}

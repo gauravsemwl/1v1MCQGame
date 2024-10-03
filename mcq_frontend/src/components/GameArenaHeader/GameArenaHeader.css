@@ -1,0 +1,56 @@
+.arena-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    padding-bottom: 0px;
+    min-width: 1430px
+        /* background-color: rgba(0, 200, 300, 0.3); */
+}
+
+.arena-game-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    font-family: 'valorax';
+    font-size: 60px;
+    color: rgba(300, 100, 200);
+    margin-bottom: 0px;
+}
+
+.player-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'supreme';
+    font-size: 30px;
+    margin-top: 10px;
+    color: rgba(200, 200, 200);
+    /* width: 100px */
+}
+
+.name1-container {
+    display: flex;
+    /* justify-content: center; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    /* direction: rtl; */
+    width: 80px;
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-bottom: 0px;
+}
+
+.name2-container {
+    display: flex;
+    /* justify-content: center; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    direction: rtl;
+    width: 80px;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+}

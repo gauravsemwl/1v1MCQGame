@@ -1,0 +1,4 @@
+.active-option {
+    background-color: rgba(10, 300, 100, 0.7);
+    transition: background-color 0.5s ease;
+}

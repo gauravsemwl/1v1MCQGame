@@ -1,0 +1,111 @@
+.question-edit {
+    display: inline;
+    word-wrap: break-word;
+    display: inline;
+    width: 480px;
+    font-size: 25px;
+    font-family: 'supreme';
+    font-weight: 400;
+    padding: 0px 8px;
+    padding-top: 4px;
+    margin-left: 2px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    outline: none;
+    transition: background-color 0.3s ease;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.question-edit:focus {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+
+
+.option-edit {
+    display: inline-block;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    padding-left: 10px;
+    padding-top: 5px;
+    font-family: 'supreme';
+    width: 460px;
+    font-size: 20px;
+    font-weight: 450;
+    color: rgba(0, 100, 100);
+    /* background-color: black; */
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.5s ease;
+    transition: padding 0.2s ease;
+}
+
+.option-edit:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+.answer-edit {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 1px 5px;
+    padding-top: 2px;
+    font-size: 22px;
+    font-family: 'supreme';
+    outline: none;
+    border-radius: 10px;
+    width: 17px;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.5s ease;
+}
+
+.answer-edit:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 200ms ease-in;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+}
+
+.slide-enter {
+    transform: translateX(-100%);
+}
+
+.slide-enter-active {
+    transform: translateX(0);
+    transition: transform 200ms ease-in;
+}
+
+.slide-exit {
+    transform: translateX(0);
+}
+
+.slide-exit-active {
+    transform: translateX(-100%);
+    transition: transform 500ms ease-out;
+}
+
+.invalid {
+    background-color: rgba(200, 0, 0, 0.3);
+}
+
+.mcq-choose {
+    background-color: rgba(200, 200, 200, 0.9);
+}

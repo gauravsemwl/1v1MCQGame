@@ -1,0 +1,160 @@
+.gamearena-container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin-top: 50px; */
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* margin: 51px 0px; */
+    /* background-color: red; */
+}
+
+/* .game {
+    display: flex;
+    height: 500px;
+    width: 900px;
+    margin-left: 100px;
+    margin-right: 4.5%;
+    background-color: black;
+
+    padding: 5px;
+    flex-direction: column;
+}
+
+.gamename {
+    width: 100%;
+    height: 40px;
+    background-color: green;
+    margin: 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamename p {
+
+    margin: 5px 0px;
+
+}
+
+.screen-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 350px;
+    background-color: white;
+    width: 550px;
+    margin-right: 45px;
+    margin-left: 40px;
+}
+
+.timer {
+    background-color: yellow;
+    margin: 0px;
+    padding: 0px;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.screen {
+    background-color: green;
+    height: 94%;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 400px;
+    width: 200px;
+    margin-right: 20px;
+    background-color: red;
+
+}
+
+.sidebar img {
+    height: 50px;
+    width: 50px;
+    background-color: green;
+}
+
+.sidebar button {
+    margin-bottom: 50px;
+}
+
+.game-menu {
+    height: 350px;
+    width: 18%;
+    margin-left: 4.5%;
+    margin-right: 100px;
+    background-color: yellow;
+    display: flex;
+    justify-content: center;
+}
+
+.game-menu-buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.game-menu-button {
+    padding: 10px 5px;
+    margin: 10px 10px;
+    cursor: pointer
+} */
+
+.main-arena-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.arena-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3px 10px;
+    font-family: 'valorax';
+    color: rgba(250, 250, 250);
+    border: none;
+    background-color: rgba(0, 0, 0);
+    border: 2px solid;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 17px;
+    transition: font-size 0.1s ease;
+}
+
+.arena-button:hover {
+    font-size: 23px;
+
+}
+
+
+.arena-button-leave {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3px 10px;
+    font-family: 'valorax';
+    color: rgba(250, 250, 250);
+    border: none;
+    background-color: rgba(0, 0, 0);
+    border: 2px solid;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 28px;
+    transition: font-size 0.1s ease;
+}
+
+.arena-button-leave:hover {
+    font-size: 40px;
+
+}

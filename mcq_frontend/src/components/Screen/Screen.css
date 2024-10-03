@@ -1,0 +1,16 @@
+.screen-container {
+    background-color: rgba(200, 250, 200, 0.1);
+    padding: 5px 6px;
+    padding-top: 15px;
+    border-radius: 5px;
+    z-index: 1;
+    height: 50vh;
+    min-width: 87vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    /* justify-content: center; */
+
+}

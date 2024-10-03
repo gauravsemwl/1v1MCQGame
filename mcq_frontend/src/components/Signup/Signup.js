@@ -1,11 +1,27 @@
 import React from 'react'
 import './Signup.css'
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import AppContext from '../../store/app-context'
+
+
 const Signup = () => {
   const [GameName, setGameName] = useState("")
   const [Password, setPassword] = useState("")
   const [GameNameError, setGameNameError] = useState("")
   const [PasswordError, setPasswordError] = useState("")
+
+  const Navigate = useNavigate()
+  const { login, handleLogin } = useContext(AppContext)
+
+
+  useEffect(() => {
+    if (login) {
+      Navigate('/home')
+    }
+  }, [])
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +41,7 @@ const Signup = () => {
       password: Password
     }
     try {
-      const res = await fetch('http://localhost:5000/users', {
+      const res = await fetch('/users', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -38,16 +54,17 @@ const Signup = () => {
         if (error.code === 11000) {
           setGameNameError('Username not availaible')
         }
+        else {
+          setGameNameError('cant save')
+        }
         return
       }
-
-      setGameName('')
-      setPassword('')
       const result = await res.json()
-      console.log(result.user)
+      handleLogin(JSON.stringify(result))
+      Navigate('/home')
     }
     catch (e) {
-      console.log('catch error')
+      console.log(e)
     }
   }
 

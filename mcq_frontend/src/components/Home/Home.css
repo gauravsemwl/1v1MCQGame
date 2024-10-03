@@ -12,11 +12,11 @@
 .home-container-inside {
     display: flex;
     justify-content: center;
-    background-color: yellow;
-    width: 400px;
-    height: 500px;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 650px;
+    height: 600px;
     padding: 40px 10px;
-    border-radius: 10px;
+    border-radius: 50px;
 }
 
 .home-buttons {
@@ -25,9 +25,35 @@
     flex-direction: column;
 }
 
+@font-face {
+    font-family: 'valorax';
+    src: url('../../assets/fonts/VALORAX-LG25V.OTF') format('opentype')
+}
+
+
 .home-button {
-    padding: 20px 20px;
-    margin: 30px 10px;
+    display: flex;
+    justify-content: center;
+    /* background-color: red; */
+    width: 600px;
+    height: 50px;
+    align-items: center;
+    padding: 0px 0px;
+    margin: 40px 10px;
     border-radius: 7px;
     cursor: pointer;
+    font-size: 40px;
+    /* font-weight: bold; */
+    font-family: 'valorax';
+    transition: font-size 0.1s ease;
+}
+
+.home-button:hover {
+    text-align: center;
+    padding: 0px 0px;
+    margin: 40px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 45px;
+    /* font-weight: bold; */
 }

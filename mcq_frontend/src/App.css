@@ -5,8 +5,18 @@ body,
     margin: 0;
 }
 
+
 .App {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-image: url('../public/mcq_app_bggg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: scroll;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    /* Overlay with a transparent black color */
+    /* background-blend-mode: overlay; */
 }

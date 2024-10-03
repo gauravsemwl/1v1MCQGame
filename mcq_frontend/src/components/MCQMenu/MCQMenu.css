@@ -1,117 +1,207 @@
+.mcqs-container {
+    display: flex;
+    flex-direction: column;
+    /* width: 500px */
+}
+
 .mcq-container {
-    padding: 0px 0px;
-    margin-bottom: 20px;
-    border: 2px solid black;
-    width: 60vh;
+    padding: 15px 20px;
+    margin: 20px;
+    margin-bottom: 40px;
+    /* border: 2px solid black; */
+    /* width: 710px; */
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+}
+
+.mcq-container:focus {
+    border: 0.5px solid rgba(0, 0, 0, 0.3);
 }
 
 .question-container {
-    border-bottom: 2px solid red;
-    padding: 8px 5px;
-    margin: 0px 0px;
-}
-
-
-.question-view {
-    display: inline;
-
-}
-
-.question-edit {
-    display: inline;
-    width: 400px;
-    font-size: 20px;
-    padding: 5px;
-    border: none;
-    border-bottom: 2px solid black;
-    /* height: 30px; */
-}
-
-.question-edit:focus {
-    outline: none;
+    display: flex;
+    /* width: 500px; */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 12px 10px;
+    padding-left: 5px;
+    margin: 0px 3px;
 }
 
 .options-container {
     /* border: 2px solid green; */
-    padding: 0px 0px;
-    margin: 0px 0px;
+    padding: 0px 5px;
+    margin: 20px 10px;
+    width: 500px;
+
 }
 
+
 .option-container {
-    margin: 3px 3px;
-    width: 100%;
+    /* display: flex; */
+    align-items: center;
+    margin: 10px 3px;
+    width: 500px;
     margin-right: 0px;
+    word-wrap: break-word;
 }
 
 .option-container::marker {
 
+    color: rgba(0, 100, 100);
+
+}
+
+.mcq-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    border-top: 0.5px solid rgba(0, 0, 0, 0.3);
+    padding: 10px 12px;
+    padding-left: 5px;
+    padding-top: 21px;
     margin: 0px 0px;
-    padding: 0px 0px;
+    height: 30px;
+    align-items: center;
+}
+
+.mcq-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.mcq-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3px 10px;
+    font-family: 'valorax';
+    border-radius: 20px;
+    border: none;
+    /* background-color: transparent; */
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 13px;
+    transition: font-size 0.1s ease;
+}
+
+.mcq-button:hover {
+    font-size: 17px;
+
+}
+
+/* 
+.invalid {
+    border: 2px solid red;
+    background-color: black;
+} */
+
+.question-view {
+    /* display: inline;
+    width: 100px;
+    word-wrap: break-word; */
+}
+
+.question-edit {
+    /* display: inline;
+    width: 300px;
+    font-size: 20px;
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid black; */
+    /* height: 30px; */
+}
+
+.question-edit:focus {
+    /* outline: none; */
+}
+
+.options-container {
+    /* border: 2px solid green; */
+    /* padding: 0px 0px;
+    margin: 0px 0px;
+    width: 500px;
+ */
+}
+
+.option-container {
+
+    /* margin: 3px 3px;
+    width: 100%;
+    margin-right: 0px; */
+}
+
+.option-container::marker {
+
+    /* margin: 0px 0px;
+    padding: 0px 0px; */
 }
 
 .option-view {
-    display: inline;
+    /* display: inline;
     padding-left: 3px;
+    width: 350px; */
 }
 
 .option-edit {
-    display: inline;
+    /* display: inline;
     padding-left: 3px;
     width: 350px;
     padding: 5px;
     border: none;
-    border-bottom: 2px solid;
+    border-bottom: 2px solid; */
 }
 
 .option-edit:focus {
-    outline: none;
+    /* outline: none; */
 }
 
 .mcq-view-buttons-container {
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
     border: 2px solid yellow;
     padding: 5px 5px;
     margin: 0px 0px;
-    align-items: center;
+    align-items: center; */
 }
 
 .mcq-edit-buttons-container {
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
     border: 2px solid yellow;
     padding: 5px 5px;
     margin: 0px 0px;
-    align-items: center;
+    align-items: center; */
 }
 
 .answer-view {
-    display: inline;
-    margin-left: 5px;
+    /* display: inline; */
+    /* margin-left: 5px; */
 
 }
 
 .answer-edit {
-    display: inline;
+    /* display: inline;
     margin-left: 5px;
-    width: 20px;
+    width: 20px; */
 
 }
 
 
 .mcq-view-buttons {
-    display: flex;
+    /* display: flex; */
 }
 
 .mcq-edit-buttons {
-    display: flex;
+    /* display: flex; */
 }
 
 
 .mcq-view-button {
-    margin: 3px 5px;
+    /* margin: 3px 5px; */
 }
 
 .mcq-edit-button {
-    margin: 3px 5px;
+    /* margin: 3px 5px; */
 }
