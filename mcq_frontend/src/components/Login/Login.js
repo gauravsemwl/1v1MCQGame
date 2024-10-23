@@ -123,22 +123,22 @@ const Login = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-            <div style={{
-                position: 'relative',
-                fontFamily: 'supreme',
-                color: 'white',
-                bottom: '90px',
-                justifyContent: 'center',
-                display: 'flex',
-                fontSize: '20px'
-            }}>
-                Don't have an account <a style={{
-                    cursor: 'pointer',
-                    marginLeft: '10px',
-                    color: 'rgba(100,300,100)',
+                <div style={{
+                    position: 'relative',
+                    fontFamily: 'supreme',
+                    color: 'white',
+                    bottom: '-100px',
+                    justifyContent: 'center',
+                    display: 'flex',
                     fontSize: '20px'
-                }} onClick={() => { Navigate('/') }}>signup</a>
+                }}>
+                    Don't have an account <a style={{
+                        cursor: 'pointer',
+                        marginLeft: '10px',
+                        color: 'rgba(100,300,100)',
+                        fontSize: '20px'
+                    }} onClick={() => { Navigate('/') }}>signup</a>
+                </div>
             </div>
         </>
     )
