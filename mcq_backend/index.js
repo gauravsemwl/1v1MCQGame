@@ -11,7 +11,7 @@ const mcqRouter = require('./src/routers/mcqRouter.js')
 const gameRouter = require('./src/routers/gameRouter.js')
 const pusherRouter = require('./src/routers/pusherRouter.js')
 const gameArenaRouter = require('./src/routers/gameArenaRouter.js')
-const port = 5000
+const port = 5001
 const cors = require('cors')
 
 const app = express()
