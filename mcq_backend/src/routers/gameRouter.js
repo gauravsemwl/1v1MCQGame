@@ -98,7 +98,7 @@ router.get('/games', auth, async (req, res) => {
 
     try {
         const games = await Game.find({})
-        res.status(201).send(games)
+        return res.status(201).send(games)
     }
     catch (e) {
         res.status(500).send({ error: 'could not fetch games' })
@@ -111,7 +111,7 @@ router.get('/games/:id', auth, async (req, res) => {
         const game = await Game.findOne({ _id: req.params.id })
 
         if (!game) {
-            res.status(404).send({ error: "game not found" })
+            return res.status(404).send({ error: "game not found" })
         }
 
         res.status(201).send(game)
@@ -126,23 +126,14 @@ router.delete('games/:id', auth, async (req, res) => {
     try {
         const game = await Game.findOne({ _id: id })
         if (!game) {
-            res.status(404).send('Game not found')
+            return res.status(404).send('Game not found')
         }
 
         const countdel = await Game.deleteOne(game)
 
         if (!countdel) {
-            res.status(404).send('Game not found')
+            return res.status(404).send('Game not found')
         }
-        req.io.emit('deletegame', id)
-
-        req.io.to(id).emit('roomclosed')
-
-        const clients = await req.io.in(id).allSockets()
-
-        clients.forEach(clientId => {
-            req.io.sockets.sockets.get(clientId).leave(id)
-        })
 
 
         res.status(201).send('Game delted successfully')

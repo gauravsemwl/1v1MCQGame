@@ -5,160 +5,164 @@ const Game = require('../db/models/games.js')
 const MCQ = require('../db/models/mcq.js')
 const MCQGame = require('../db/models/mcqGames.js')
 const auth = require('../middleware/auth.js')
-const { GAME_STATE } = require('../constants.js')
+const { GAME_STATE } = require('../../constants.js')
 const User = require('../db/models/users.js')
 
 const gameInterval = {}
 
 const handlegame = async (game, action, options) => {
-    if (action === "INITIALIZE") {
-        game.timer = options.countDownTime
+    try {
+        if (action === "INITIALIZE") {
+            game.timer = options.countDownTime
 
-        game.state = "INITIALIZING"
+            game.state = "INITIALIZING"
 
-        await game.save()
-
-        gameInterval[game._id] = setInterval(async () => {
-            pusher.trigger(`presence-${game._id}`, 'init-count', { timer: game.timer, state: game.state })
-            game.timer = game.timer - 1
             await game.save()
-            if (game.timer < 0) {
-                clearInterval(gameInterval[game._id])
-                gameInterval[game._id] = null;
 
-                await handlegame(game, "REQ_ASK", {
-                    countDownTime: 20,
-                    currentTurn: game.player1
-                })
-            }
-        }, 1000)
-
-        return
-    }
-    if (action === "REQ_ASK") {
-        game.timer = options.countDownTime
-
-        game.state = "ASK"
-
-        game.currentTurn = options.currentTurn
-
-        await game.save()
-
-        gameInterval[game._id] = setInterval(async () => {
-            pusher.trigger(`presence-${game._id}`, 'ask', {
-                timer: game.timer,
-                state: game.state,
-                currentTurn: game.currentTurn
-            })
-            game.timer = game.timer - 1
-            await game.save()
-            if (game.timer < 0) {
-                clearInterval(gameInterval[game._id])
-                gameInterval[game._id] = null;
-
-                if (game.currentTurn.toString() === game.player1.toString()) {
-                    game.player2Score = game.player2Score + 1
-                }
-                else {
-                    game.player1Score = game.player1Score + 1
-                }
-
+            gameInterval[game._id] = setInterval(async () => {
+                pusher.trigger(`presence-${game._id}`, 'init-count', { timer: game.timer, state: game.state })
+                game.timer = game.timer - 1
                 await game.save()
+                if (game.timer < 0) {
+                    clearInterval(gameInterval[game._id])
+                    gameInterval[game._id] = null;
 
-                pusher.trigger(`presence-${game._id}`, 'update-score', {
-                    player1Score: game.player1Score,
-                    player2Score: game.player2Score
-                })
-
-                if (game.player1Score + game.player2Score >= 6) {
-                    await handlegame(game, "SEND_RESULT", {})
-                    return
+                    await handlegame(game, "REQ_ASK", {
+                        countDownTime: 30,
+                        currentTurn: game.player1
+                    })
                 }
+            }, 1000)
 
-                await handlegame(game, "REQ_ASK", {
-                    countDownTime: 20,
-                    currentTurn: game.currentTurn.toString() === game.player1.toString() ? game.player2 : game.player1
-                })
-            }
-        }, 1000)
+            return
+        }
+        if (action === "REQ_ASK") {
+            game.timer = options.countDownTime
 
-    }
-    if (action === "REQ_ANSWER") {
-        game.state = "ANSWER"
+            game.state = "ASK"
 
-        game.timer = options.countDownTime
+            game.currentTurn = options.currentTurn
 
-        game.currentTurn = options.currentTurn
-
-
-        const mcq = options.mcq
-
-        await game.save()
-
-        gameInterval[game._id] = setInterval(async () => {
-            pusher.trigger(`presence-${game._id}`, 'answer', {
-                timer: game.timer,
-                state: game.state,
-                currentTurn: game.currentTurn,
-                mcq: mcq
-            })
-
-            game.timer = game.timer - 1
             await game.save()
 
-            if (game.timer < 0) {
-                clearInterval(gameInterval[game._id])
-                gameInterval[game._id] = null;
-
-                if (game.currentTurn.toString() === game.player1.toString()) {
-                    game.player2Score = game.player2Score + 1
-                }
-                else {
-                    game.player1Score = game.player1Score + 1
-                }
-
-                await game.save()
-
-                pusher.trigger(`presence-${game._id}`, 'update-score', {
-                    player1Score: game.player1Score,
-                    player2Score: game.player2Score
-                })
-
-                if (game.player1Score + game.player2Score >= 6) {
-                    await handlegame(game, "SEND_RESULT", {})
-                    return
-                }
-
-                await handlegame(game, "REQ_ASK", {
-                    countDownTime: 20,
+            gameInterval[game._id] = setInterval(async () => {
+                pusher.trigger(`presence-${game._id}`, 'ask', {
+                    timer: game.timer,
+                    state: game.state,
                     currentTurn: game.currentTurn
                 })
+                game.timer = game.timer - 1
+                await game.save()
+                if (game.timer < 0) {
+                    clearInterval(gameInterval[game._id])
+                    gameInterval[game._id] = null;
+
+                    if (game.currentTurn.toString() === game.player1.toString()) {
+                        game.player2Score = game.player2Score + 1
+                    }
+                    else {
+                        game.player1Score = game.player1Score + 1
+                    }
+
+                    await game.save()
+
+                    pusher.trigger(`presence-${game._id}`, 'update-score', {
+                        player1Score: game.player1Score,
+                        player2Score: game.player2Score
+                    })
+
+                    if (game.player1Score + game.player2Score >= 10) {
+                        await handlegame(game, "SEND_RESULT", {})
+                        return
+                    }
+
+                    await handlegame(game, "REQ_ASK", {
+                        countDownTime: 30,
+                        currentTurn: game.currentTurn.toString() === game.player1.toString() ? game.player2 : game.player1
+                    })
+                }
+            }, 1000)
+
+        }
+        if (action === "REQ_ANSWER") {
+            game.state = "ANSWER"
+
+            game.timer = options.countDownTime
+
+            game.currentTurn = options.currentTurn
+
+
+            const mcq = options.mcq
+
+            await game.save()
+
+            gameInterval[game._id] = setInterval(async () => {
+                pusher.trigger(`presence-${game._id}`, 'answer', {
+                    timer: game.timer,
+                    state: game.state,
+                    currentTurn: game.currentTurn,
+                    mcq: mcq
+                })
+
+                game.timer = game.timer - 1
+                await game.save()
+
+                if (game.timer < 0) {
+                    clearInterval(gameInterval[game._id])
+                    gameInterval[game._id] = null;
+
+                    if (game.currentTurn.toString() === game.player1.toString()) {
+                        game.player2Score = game.player2Score + 1
+                    }
+                    else {
+                        game.player1Score = game.player1Score + 1
+                    }
+
+                    await game.save()
+
+                    pusher.trigger(`presence-${game._id}`, 'update-score', {
+                        player1Score: game.player1Score,
+                        player2Score: game.player2Score
+                    })
+
+                    if (game.player1Score + game.player2Score >= 10) {
+                        await handlegame(game, "SEND_RESULT", {})
+                        return
+                    }
+
+                    await handlegame(game, "REQ_ASK", {
+                        countDownTime: 30,
+                        currentTurn: game.currentTurn
+                    })
+                }
+
+            }, 1000)
+        }
+
+        if (action === "SEND_RESULT") {
+            if (game.player1Score.toString() === game.player2Score.toString()) {
+                pusher.trigger(`presence-${game._id}`, 'result', {
+                    winner: [game.player1.toString(), game.player2.toString()]
+                })
             }
-
-        }, 1000)
+            else if (game.player1Score > game.player2Score) {
+                pusher.trigger(`presence-${game._id}`, 'result', {
+                    winner: [game.player1.toString()]
+                })
+            }
+            else if (game.player1Score < game.player2Score) {
+                pusher.trigger(`presence-${game._id}`, 'result', {
+                    winner: [game.player2.toString()]
+                })
+            }
+            game.state = "OVER"
+            await game.save()
+            await Game.deleteOne(game)
+            return
+        }
     }
-
-    if (action === "SEND_RESULT") {
-        if (game.player1Score.toString() === game.player2Score.toString()) {
-            pusher.trigger(`presence-${game._id}`, 'result', {
-                winner: [game.player1.toString(), game.player2.toString()]
-            })
-            return;
-        }
-        else if (game.player1Score > game.player2Score) {
-            pusher.trigger(`presence-${game._id}`, 'result', {
-                winner: [game.player1.toString()]
-            })
-            return
-        }
-        else if (game.player1Score < game.player2Score) {
-            pusher.trigger(`presence-${game._id}`, 'result', {
-                winner: [game.player2.toString()]
-            })
-            return
-        }
-        game.state = "OVER"
-        await game.save()
+    catch (e) {
+        console.log(e)
     }
 
 }
@@ -223,7 +227,7 @@ router.post(`/gamearena/ask/:id/:playerId`, async (req, res) => {
         await handlegame(game, "REQ_ANSWER", {
             mcq: mcq,
             currentTurn: game.currentTurn.toString() === game.player1.toString() ? game.player2 : game.player1,
-            countDownTime: 10,
+            countDownTime: 20,
         })
 
         res.status(200).send({ message: "question sent" })
@@ -274,12 +278,10 @@ router.post(`/gamearena/save&ask/:id/:userId`, async (req, res) => {
 
         await newMCQ.save()
 
-        console.log('jhii')
-
         await handlegame(game, "REQ_ANSWER", {
             mcq: mcq,
             currentTurn: game.currentTurn.toString() === game.player1.toString() ? game.player2 : game.player1,
-            countDownTime: 10,
+            countDownTime: 20,
         })
 
         res.status(200).send({ message: "question sent" })
@@ -341,13 +343,13 @@ router.post('/gamearena/answer/:id/:playerId', async (req, res) => {
             player2Score: game.player2Score
         })
 
-        if (game.player1Score + game.player2Score >= 6) {
+        if (game.player1Score + game.player2Score >= 10) {
             await handlegame(game, "SEND_RESULT", {})
             return res.status(200).send({ message: "game-over" })
         }
 
         await handlegame(game, "REQ_ASK", {
-            countDownTime: 20,
+            countDownTime: 30,
             currentTurn: game.currentTurn
         })
 
@@ -357,6 +359,56 @@ router.post('/gamearena/answer/:id/:playerId', async (req, res) => {
     catch (e) {
         res.status(500).send(e)
     }
+})
+
+
+router.post('/gamearena/exit/:game_id/:user_id', async (req, res) => {
+
+    try {
+        if (gameInterval[req.params.game_id]) {
+            clearInterval(gameInterval[req.params.game_id])
+        }
+
+        gameInterval[req.params.game_id] = null
+
+        const game = await Game.findOne({
+            _id: req.params.game_id
+        })
+
+        if (!game) {
+            consolelog('1')
+            return res.status(404).send('game not found')
+        }
+
+        await MCQGame.deleteMany({ game_id: game._id })
+
+        if (game.player2) {
+            if (req.params.user_id.toString() === game.player1.toString()) {
+                pusher.sendToUser(`${game.player2.toString()}`, 'win-exit', {
+                })
+            }
+            else {
+                pusher.sendToUser(`${game.player1.toString()}`, 'win-exit', {
+                })
+            }
+        }
+
+        game.state = "OVER"
+        await game.save()
+
+        const countdel = await Game.deleteOne(game)
+
+        if (!countdel) {
+            consolelog('2')
+            return res.status(404).send('Game not found')
+        }
+
+        res.status(200).send({ message: 'game deleted' })
+    }
+    catch (e) {
+        res.status(500).send(e)
+    }
+
 })
 
 module.exports = router

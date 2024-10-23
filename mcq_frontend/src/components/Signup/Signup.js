@@ -19,7 +19,7 @@ const Signup = () => {
     if (login) {
       Navigate('/home')
     }
-  }, [])
+  }, [login])
 
 
 
@@ -61,7 +61,6 @@ const Signup = () => {
       }
       const result = await res.json()
       handleLogin(JSON.stringify(result))
-      Navigate('/home')
     }
     catch (e) {
       console.log(e)
@@ -81,46 +80,68 @@ const Signup = () => {
     setGameNameError("")
   }
   return (
-    <div className='container'>
-      <div>
-        <h1>CREATE NEW ACCOUNT</h1>
-      </div>
-      <div className='signup-container'>
-        <form onSubmit={handleSubmit} className='signup-form'>
-          <div className='input-container'>
-            <div className='gamename-error-message'>{GameNameError}</div>
-            <div className='input-container-inside'>
-              <label htmlFor="gamename">GAME-NAME</label>
-              <input
-                id="gamename"
-                type="text"
-                name="gamename"
-                placeholder='e.g. Smoke07'
-                value={GameName}
-                onChange={onGamenameChange}
-              ></input>
+    <>
+
+      <div className='container'>
+        <div>
+          <h1 className='title-sign'>CREATE NEW ACCOUNT</h1>
+        </div>
+        <div className='signup-container'>
+          <form onSubmit={handleSubmit} className='signup-form'>
+            <div className='input-container'>
+              <div className='gamename-error-message'>{GameNameError}</div>
+              <div className='input-container-inside'>
+                <label htmlFor="gamename" className='label'>GAME-NAME</label>
+                <input
+                  id="gamename"
+                  type="text"
+                  name="gamename"
+                  placeholder='e.g. Smoke07'
+                  value={GameName}
+                  onChange={onGamenameChange}
+                  className='input-sign'
+                ></input>
+              </div>
             </div>
-          </div>
-          <div className='input-container'>
-            <div className='gamename-error-message'>{PasswordError}</div>
-            <div className='input-container-inside'>
-              <label htmlFor="password">PASSWORD</label>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                placeholder='password'
-                value={Password}
-                onChange={onPasswordChange}
-              ></input></div>
-            {/* <div className='gamename-error-message'>csdcsd</div> */}
-          </div>
-          <div className='single-button-container'>
-            <button className='signup-button' type='submit'>Sign Up</button>
-          </div>
-        </form>
+            <div className='input-container'>
+              <div className='gamename-error-message'>{PasswordError}</div>
+              <div className='input-container-inside'>
+                <label htmlFor="password">PASSWORD</label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder='password'
+                  value={Password}
+                  onChange={onPasswordChange}
+                  className='input-sign'
+                ></input></div>
+              {/* <div className='gamename-error-message'>csdcsd</div> */}
+            </div>
+            <div className='single-button-container'>
+              <button className='signup-button' type='submit'>Sign Up</button>
+            </div>
+          </form>
+        </div>
+
       </div>
-    </div>
+      <div style={{
+        position: 'relative',
+        fontFamily: 'supreme',
+        color: 'white',
+        bottom: '90px',
+        justifyContent: 'center',
+        display: 'flex',
+        fontSize: '20px'
+      }}>
+        Already have an account <a style={{
+          cursor: 'pointer',
+          marginLeft: '10px',
+          color: 'rgba(100,300,100)',
+          fontSize: '20px'
+        }} onClick={() => { Navigate('/signin') }}>login</a>
+      </div>
+    </>
   )
 }
 

@@ -13,14 +13,44 @@ const Games = ({ showGames, handleShowGames }) => {
 
 
     useEffect(() => {
-        console.log('useeffect')
+        let newGameChannel = null;
 
-        const newGameChannel = pusher.subscribe('new-games')
+        if (pusher) {
+            newGameChannel = pusher.subscribe('new-games')
 
-        newGameChannel.bind('created', (game) => {
-            setGames((state) => [...state, game])
-        })
+            newGameChannel.bind('created', (game) => {
+                setGames((state) => [...state, game])
+            })
 
+
+            pusher.user.bind('join-req-res', (data) => {
+                if (data.response === "ACCEPTED") {
+                    console.log(`requested accepted for ${data.name}`)
+                    const gameChannel = pusher.subscribe(`presence-${data.game_id}`)
+
+                    gameChannel.bind('pusher:subscription_succeeded', async () => {
+                        Navigate(`/home/${data.game_id}`)
+                    })
+                }
+                else if (data.response === "DECLINED") {
+                    console.log(`requested declined for ${data.name}`)
+                }
+
+            })
+        }
+
+        return () => {
+            if (newGameChannel) {
+                newGameChannel.unbind_all()
+                newGameChannel.unsubscribe()
+            }
+            if (pusher) {
+                pusher.user.unbind()
+            }
+        }
+    }, [pusher])
+
+    useEffect(() => {
         const getGames = async () => {
             try {
                 const res = await fetch('/games', {
@@ -48,29 +78,7 @@ const Games = ({ showGames, handleShowGames }) => {
         }
 
         getGames()
-
-        pusher.user.bind('join-req-res', (data) => {
-            if (data.response === "ACCEPTED") {
-                console.log(`requested accepted for ${data.name}`)
-                const gameChannel = pusher.subscribe(`presence-${data.game_id}`)
-
-                gameChannel.bind('pusher:subscription_succeeded', async () => {
-                    Navigate(`/home/${data.game_id}`)
-                })
-            }
-            else if (data.response === "DECLINED") {
-                console.log(`requested declined for ${data.name}`)
-            }
-
-        })
-
-
-        return () => {
-            newGameChannel.unbind_all()
-            newGameChannel.unsubscribe()
-            pusher.user.unbind()
-        }
-    }, [])
+    })
 
     const filterGames = useMemo(() => {
         if (!Games) return [];

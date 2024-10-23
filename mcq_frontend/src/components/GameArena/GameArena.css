@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'valorax';
+    src: url('../../assets/fonts/VALORAX-LG25V.OTF') format('opentype')
+}
+
+
 .gamearena-container {
     display: flex;
     flex-direction: column;
@@ -124,8 +130,9 @@
     font-family: 'valorax';
     color: rgba(250, 250, 250);
     border: none;
-    background-color: rgba(0, 0, 0);
-    border: 2px solid;
+    border-radius: 10px;
+    background-color: rgba(100, 100, 100, 0.7);
+    /* border: 2px solid; */
     cursor: pointer;
     padding: 5px 10px;
     font-size: 17px;
@@ -144,7 +151,7 @@
     align-items: center;
     margin: 3px 10px;
     font-family: 'valorax';
-    color: rgba(250, 250, 250);
+    color: rgba(200, 200, 200);
     border: none;
     background-color: rgba(0, 0, 0);
     border: 2px solid;

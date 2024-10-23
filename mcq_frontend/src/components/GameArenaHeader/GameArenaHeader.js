@@ -12,7 +12,7 @@ const GameArenaHeader = ({ yourName, gameName, opponentName, timer }) => {
                 <div>
                     {gameName}
                 </div>
-                <div style={{ position: 'relative', fontSize: '20px', fontFamily: 'valorax', padding: '10px', bottom: '-15px' }}>
+                <div style={{ position: 'relative', fontSize: '20px', fontFamily: 'valorax', padding: '10px', bottom: '-15px', color: 'rgba(200,200,200)' }}>
                     {timer ? timer : 0}
                 </div>
             </div>

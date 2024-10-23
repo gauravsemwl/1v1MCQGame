@@ -42,9 +42,6 @@ UserSchema.methods.genAuthToken = async function (res) {
         expiresIn: '30d'
     })
 
-
-    console.log(user)
-    console.log(token)
     res.cookie('jwt', token, {
         httpOnly: true,
         secure: false,

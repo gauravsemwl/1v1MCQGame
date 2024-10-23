@@ -8,11 +8,11 @@ import { GAME_STATE, GAME_STATE_ACTION } from '../../constants'
 import ASK from '../ASK/ASK'
 import ANSWER from '../ANSWER/ANSWER'
 import GameArenaHeader from '../GameArenaHeader/GameArenaHeader'
-import MCQAsk from '../MCQAsk/MCQAsk'
 import Score from '../Score/Score'
 import Screen from '../Screen/Screen'
 import Result from '../Result/Result'
-
+import MCQMenu from '../MCQMenu/MCQMenu'
+import ExitGame from '../ExitGame/ExitGame'
 
 
 
@@ -78,7 +78,8 @@ const initialGameState = {
 const GameArena = () => {
     const [oppName, setOppName] = useState(null)
     const [pendingRequests, setPendingRequests] = useState([])
-    const [runState, setRunState] = useState(true)
+    const [showMCQMenu, setShowMCQMenu] = useState(false)
+    const [showExit, setShowExit] = useState(false)
     const { pusher, userInfo, login, pusherState } = useContext(AppContext)
     const [gameState, dispatchGameAction] = useReducer(gameStateReducer, initialGameState)
     const [MCQ, setMCQ] = useState()
@@ -134,6 +135,7 @@ const GameArena = () => {
                 }
                 catch (e) {
                     console.log(e)
+                    Navigate('/')
                 }
             }
 
@@ -184,6 +186,18 @@ const GameArena = () => {
                         }
 
                     })
+
+                    pusher.user.bind('win-exit', (info) => {
+                        setWin([userInfo._id.toString()])
+
+                        dispatchGameAction({
+                            type: GAME_STATE_ACTION.GAME_OVER,
+                            payload: {
+                                state: GAME_STATE.OVER
+                            }
+                        })
+                    })
+
 
                     const gameChannel = pusher.subscribe(`presence-${game_id}`)
 
@@ -305,15 +319,14 @@ const GameArena = () => {
     }, [gameState])
 
     // useEffect(() => {
-    //     if (pusherState == 'connected') {
-    //         if (runState == false) {
-    //             //send resume
+    //     if (gameState) {
+    //         if (gameState.state === GAME_STATE.OVER) {
+    //             setTimeout(() => {
+    //                 Navigate('/')
+    //             }, 60000)
     //         }
     //     }
-    //     if (pusherState == 'unavailable') {
-
-    //     }
-    // }, [pusherState])
+    // }, [gameState])
 
 
     const handleRequestAccept = async (value) => {
@@ -484,9 +497,43 @@ const GameArena = () => {
         setAnswer(answer)
     }
 
+    const handleManageMCQs = () => {
+        if (showMCQMenu) {
+            setShowMCQMenu(false)
+            return
+        }
+        setShowMCQMenu(true)
+    }
+
+    const handleExitAccept = async () => {
+        try {
+            const res = await fetch(`/gamearena/exit/${game_id}/${userInfo._id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            })
+
+            if (!res.ok) {
+                throw new Error('Couldnt Exit game')
+            }
+
+            Navigate('/')
+        }
+        catch (e) {
+            console.log(e)
+        }
+
+    }
+
+    const handleExitDecline = () => {
+        setShowExit(false)
+    }
+
 
     return (
         <div className='gamearena-container'>
+            {showMCQMenu && <MCQMenu showMCQMenu={showMCQMenu} handleShowMCQMenu={handleManageMCQs} />}
             <GameArenaHeader yourName={userInfo.gameName} gameName={gameState ? gameState.name : "loading.."} opponentName={oppName ? oppName : "Loading.."} timer={gameState ? gameState.timer : "0"}></GameArenaHeader>
 
             <div className='main-arena-container'>
@@ -521,8 +568,16 @@ const GameArena = () => {
                     }
                     {gameState && gameState.state === GAME_STATE.NOT_INITIALIZED &&
                         <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                            <p style={{ display: 'flex', justifyContent: 'center', padding: '120px 0px', fontFamily: 'supreme', width: '510px', textAlign: 'center', fontSize: '30px', color: 'rgba(200,200,200)' }}>
+                            <p style={{ zIndex: '0', display: 'flex', justifyContent: 'center', padding: '120px 0px', fontFamily: 'supreme', width: '510px', textAlign: 'center', fontSize: '30px', color: 'rgba(200,200,200)' }}>
                                 Waiting for other player to join...
+                            </p>
+                        </div>
+                    }
+
+                    {gameState && gameState.state === GAME_STATE.INITIALIZING &&
+                        <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                            <p style={{ zIndex: '0', display: 'flex', justifyContent: 'center', padding: '120px 0px', fontFamily: 'supreme', width: '510px', textAlign: 'center', fontSize: '30px', color: 'rgba(200,200,200)' }}>
+                                your game is starting
                             </p>
                         </div>
                     }
@@ -538,120 +593,117 @@ const GameArena = () => {
                 ></Score>
 
             </div>
-            {
-                gameState && gameState.state === GAME_STATE.ASK && gameState.currentTurn === userInfo._id &&
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '1430px', height: '50px', marginTop: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: `${chooseAndAsk ? "200px" : "300px"}`, height: '10px', transition: 'width 0.05s ease' }}>
-                        < button className='arena-button' onClick={() => {
-                            if (chooseAndAsk) {
-                                setChooseAndAsk(false)
-                                return
-                            }
-                            setChooseAndAsk(true)
-                        }}>{chooseAndAsk ? "Cancel" : "choose and ask"}</button>
-                    </div>
-
-                    {chooseAndAsk === false && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90px', height: '10px', marginLeft: '0px' }}>
-                        <button className='arena-button' onClick={() => {
-                            if (askQuestion.length === 0) {
-                                questionRef.current.classList.add('invalid')
-                                return
-                            }
-
-                            let wrong = 0;
-                            askOptions.forEach((el, i) => {
-                                if (el.length === 0) {
-                                    optionsRef.current[i].classList.add('invalid')
-                                    wrong++;
-                                }
-
-                            })
-
-                            if (wrong > 0) {
-                                return
-                            }
-
-                            if (askAnswer.length === 0) {
-                                answerRef.current.classList.add('invalid')
-                                return
-                            }
-
-                            for (var i = 1; i <= askOptions.length; i++) {
-                                if (i == askAnswer) {
-                                    handleAsk(askQuestion, askOptions, askAnswer)
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '1430px', height: '50px', marginTop: '10px' }}>
+                {
+                    gameState && gameState.state === GAME_STATE.ASK && gameState.currentTurn === userInfo._id &&
+                    <>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: `${chooseAndAsk ? "200px" : "300px"}`, height: '10px', transition: 'width 0.05s ease' }}>
+                            < button className='arena-button' onClick={() => {
+                                if (chooseAndAsk) {
+                                    setChooseAndAsk(false)
                                     return
                                 }
-                            }
+                                setChooseAndAsk(true)
+                            }}>{chooseAndAsk ? "Cancel" : "choose and ask"}</button>
+                        </div>
 
-                            // if(!editAnswer.lenght)
-                            // console.log({
-                            //     editQuestion,
-                            //     editOptions,
-                            //     editAnswer
-                            // })
-                            answerRef.current.classList.add('invalid')
-                        }
-                        }>ask</button>
-                    </div>}
-                    {chooseAndAsk === false && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '270px', height: '10px' }}>
-                        < button className='arena-button' onClick={() => {
-                            if (askQuestion.length === 0) {
-                                questionRef.current.classList.add('invalid')
-                                return
-                            }
-
-                            let wrong = 0;
-                            askOptions.forEach((el, i) => {
-                                if (el.length === 0) {
-                                    optionsRef.current[i].classList.add('invalid')
-                                    wrong++;
-                                }
-
-                            })
-
-                            if (wrong > 0) {
-                                return
-                            }
-
-                            if (askAnswer.length === 0) {
-                                answerRef.current.classList.add('invalid')
-                                return
-                            }
-
-                            for (var i = 1; i <= askOptions.length; i++) {
-                                if (i == askAnswer) {
-                                    handleSaveandAsk(askQuestion, askOptions, askAnswer)
+                        {chooseAndAsk === false && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90px', height: '10px', marginLeft: '0px' }}>
+                            <button className='arena-button' onClick={() => {
+                                if (askQuestion.length === 0) {
+                                    questionRef.current.classList.add('invalid')
                                     return
                                 }
+
+                                let wrong = 0;
+                                askOptions.forEach((el, i) => {
+                                    if (el.length === 0) {
+                                        optionsRef.current[i].classList.add('invalid')
+                                        wrong++;
+                                    }
+
+                                })
+
+                                if (wrong > 0) {
+                                    return
+                                }
+
+                                if (askAnswer.length === 0) {
+                                    answerRef.current.classList.add('invalid')
+                                    return
+                                }
+
+                                for (var i = 1; i <= askOptions.length; i++) {
+                                    if (i == askAnswer) {
+                                        handleAsk(askQuestion, askOptions, askAnswer)
+                                        return
+                                    }
+                                }
+                                answerRef.current.classList.add('invalid')
                             }
+                            }>ask</button>
+                        </div>}
+                        {chooseAndAsk === false && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '270px', height: '10px' }}>
+                            < button className='arena-button' onClick={() => {
+                                if (askQuestion.length === 0) {
+                                    questionRef.current.classList.add('invalid')
+                                    return
+                                }
 
-                        }}>save and ask</button>
-                    </div>}
-                </div >
-            }
+                                let wrong = 0;
+                                askOptions.forEach((el, i) => {
+                                    if (el.length === 0) {
+                                        optionsRef.current[i].classList.add('invalid')
+                                        wrong++;
+                                    }
 
-            {gameState && gameState.state === GAME_STATE.ANSWER && gameState.currentTurn === userInfo._id &&
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '1430px', height: '50px', marginTop: '10px' }}>
+                                })
+
+                                if (wrong > 0) {
+                                    return
+                                }
+
+                                if (askAnswer.length === 0) {
+                                    answerRef.current.classList.add('invalid')
+                                    return
+                                }
+
+                                for (var i = 1; i <= askOptions.length; i++) {
+                                    if (i == askAnswer) {
+                                        handleSaveandAsk(askQuestion, askOptions, askAnswer)
+                                        return
+                                    }
+                                }
+
+                            }}>save and ask</button>
+                        </div>}
+                    </>
+
+                }
+
+                {gameState && gameState.state === GAME_STATE.ANSWER && gameState.currentTurn === userInfo._id &&
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '90px', height: '10px', marginLeft: '10px' }}>
                         <button className='arena-button' onClick={() => handleAnswer(MCQ._id, answer + 1)}>answer</button>
                     </div>
-                </div >
-            }
+                }
+            </div >
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '1430px', height: '50px', marginTop: '10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '270px', height: '10px', marginLeft: '150px' }}>
-                    <button className='arena-button-leave' style={{ backgroundColor: 'transparent', border: '0px', }}>my mcq</button>
+            <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '930px', height: '60px', bottom: '-20px', left: '0px', backgroundColor: 'rgba(0,0,0,0.9)', margin: '0px 250px', borderRadius: '30px' }}>
+                <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '270px', height: '10px', left: '10px' }}>
+                    <button className='arena-button-leave' style={{ backgroundColor: 'transparent', border: '0px', }} onClick={() => { setShowMCQMenu(true) }}>my mcq</button>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '270px', height: '10px', marginRight: '150px' }}>
-                    < button className='arena-button-leave' style={{ backgroundColor: 'transparent', border: '0px', }}>
+                <div style={{ position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '210px', height: '10px', right: '10px' }}>
+                    < button className='arena-button-leave' style={{ backgroundColor: 'transparent', border: '0px', }} onClick={() => {
+                        if (showExit)
+                            return setShowExit(false)
+                        setShowExit(true)
+                    }}>
                         <i class="fa fa-sign-out" aria-hidden="true" style={{ fontSize: '40px', marginRight: '8px' }}></i>
                         Exit</button>
                 </div>
             </div >
 
-            {gameState && gameState.state === GAME_STATE.INITIALIZING && <Countdown count={gameState.timer}></Countdown>}
-
-            {pendingRequests.length > 0 &&
+            {
+                pendingRequests.length > 0 &&
                 pendingRequests.map((request) => (
                     <RequestNotification
                         value={request}
@@ -660,7 +712,15 @@ const GameArena = () => {
                     />
                 ))
             }
-        </div>
+
+            {
+                showExit &&
+                <ExitGame
+                    handleExitAccept={handleExitAccept}
+                    handleExitDecline={handleExitDecline}
+                ></ExitGame>
+            }
+        </div >
     )
 }
 

@@ -26,7 +26,10 @@ router.get('/users/auth-check', async (req, res) => {
             throw new Error('User Not Authenticated')
         }
 
-        res.status(200).send({ message: "Authenticated" })
+        res.status(200).send({
+            _id: user._id,
+            gameName: user.gameName
+        })
     }
     catch (e) {
         console.log(e)
@@ -51,11 +54,11 @@ router.post('/users', async (req, res) => {
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.gameName, req.body.password)
+        if (!user) {
+            return res.status(400).send({ error: 'user not found' })
+        }
         await user.genAuthToken(res)
         res.send(user)
-        if (!user) {
-            res.status(400).send({ error: 'user not found' })
-        }
     }
     catch (e) {
         console.log(e)
@@ -67,10 +70,10 @@ router.post('/users/login', async (req, res) => {
 
 router.post('/users/logout', auth, async (req, res) => {
     try {
-        req.user.tokens = req.user.tokens.filter((token) => {
-            return token.token != req.token
+        res.cookie('jwt', '', {
+            httpOnly: true,
+            expires: new Date(0)
         })
-        await req.user.save()
         res.status(200).send("logged out successfully")
     }
     catch (e) {

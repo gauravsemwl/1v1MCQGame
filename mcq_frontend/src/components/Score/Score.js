@@ -7,7 +7,6 @@ const Score = ({ score, player }) => {
     return (
         <div className='score-container'>
             <p className={cx('score', { ['player1']: player === 1, ['player2']: player === 2 })}>{score}</p>
-            <p className='score-text'>SCORE</p>
         </div>
     )
 }

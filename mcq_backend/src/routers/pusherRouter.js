@@ -12,6 +12,7 @@ router.post('/pusher/user-auth', async (req, res) => {
             id: req.body._id,
             name: req.body.gameName
         }
+        console.log(user, socketId)
 
         const authResponse = pusher.authenticateUser(socketId, user)
 
@@ -22,15 +23,19 @@ router.post('/pusher/user-auth', async (req, res) => {
         res.status(200).send(authResponse)
     }
     catch (e) {
-        res.status(403).send(e)
+        console.log(e)
+        res.status(500).send(e)
     }
 })
 
 router.post('/pusher/auth', async (req, res) => {
     const socketId = req.body.socket_id
+    console.log(socketId)
     const channel = req.body.channel_name
+    console.log(channel)
     const gameId = channel.split('-')[1]
     const fromUser = req.body._id
+    console.log(fromUser)
     try {
         const game = await Game.findOne({ _id: gameId })
 
@@ -60,6 +65,7 @@ router.post('/pusher/auth', async (req, res) => {
 
     }
     catch (e) {
+        // console.log(e)
         res.status(500).send(e)
     }
 })

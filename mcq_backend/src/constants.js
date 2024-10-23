@@ -1,8 +1,0 @@
-
-const GAME_STATE = {
-    NOT_INITIALIZED: "NOT_INITIALIZED",
-    INITIALIZING: "INITIALIZING",
-    ASK: "ASK"
-}
-
-module.exports = GAME_STATE

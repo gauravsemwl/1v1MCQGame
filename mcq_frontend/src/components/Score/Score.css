@@ -3,16 +3,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-right: 130px;
-    padding-left: 130px;
+    padding-right: 140px;
+    padding-left: 140px;
 
 }
 
 .score {
-    font-size: 100px;
+    font-size: 140px;
     margin: 0px;
     font-family: 'valorax';
-    color: rgba(100, 300, 100)
+    color: rgba(100, 300, 100);
+    width: 133px
 }
 
 .player1 {

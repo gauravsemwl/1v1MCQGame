@@ -7,15 +7,33 @@
     height: 100%
 }
 
+.title-sign {
+    font-family: 'supreme';
+    font-weight: bold;
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 80px;
+    margin-top: -55px;
+    display: block;
+    color: rgba(100, 350, 00);
+
+}
+
 .signup-container {
     display: flex;
     justify-content: center;
+    margin-bottom: 40px;
+
 }
 
 .signup-form {
-    background-color: yellow;
+    /* border: 1px solid rgba(0, 0, 0); */
+    background-color: rgba(100, 300, 200, 0.96);
     border-radius: 20px;
     flex-direction: column;
+
+    /* display: flex; */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); */
 }
 
 .input-container {
@@ -23,12 +41,9 @@
     justify-content: center;
     flex-direction: column;
     margin: 30px 30px;
-    margin-top: 50px;
-}
+    margin-top: 40px;
 
-.input-container-inside {
-    display: flex;
-    justify-content: space-between;
+
 }
 
 .input-container-inside {
@@ -37,37 +52,64 @@
 }
 
 .input-container-inside label {
-    margin: 0px 17px;
-    font-size: 25px;
+    display: flex;
+    /* font-size: 100px; */
+    font-family: 'valorax';
+    font-size: 20px;
+    padding: 10px 10px;
+    align-items: center;
+    margin-right: 30px;
 }
 
-.input-container-inside input {
-    margin: 0px 17px;
-    border-radius: 5px;
-    padding: 0px 15px;
-
+.input-sign {
+    padding: 10px 10px;
+    margin: 0px 0px;
+    font-family: 'supreme';
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 3px solid transparent;
+    transition: border-color 0.3s ease;
+    outline: none;
+    color: white;
+    border-radius: 15px;
 }
 
-
-h1 {
-    text-align: center;
-    margin: 30px 0px;
-    display: block;
+.input-sign:focus {
+    border-color: rgba(0, 0, 0, 0.5);
 }
+
 
 .single-button-container {
     display: flex;
     justify-content: center;
-    margin: 40px 10px
+    margin-bottom: 30px;
 }
 
 .signup-button {
     padding: 7px 10px;
+    font-family: valorax;
+    font-size: 20px;
+    background-color: transparent;
+    outline: none;
+    border: 0px;
+    cursor: pointer;
+    border-radius: 9px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.signup-button:hover {
+    /* background-color: rgba(0, 0, 0, 0.4); */
+    color: rgba(0, 0, 0)
 }
 
 .gamename-error-message {
     width: 180px;
-    margin-left: 200px;
+    margin-left: 230px;
     font-size: 10px;
     height: 15px;
+    font-family: supreme;
+    color: rgba(300, 0, 0)
 }

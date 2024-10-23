@@ -12,6 +12,16 @@
     /* width: 710px; */
     background-color: rgba(0, 0, 0, 0.15);
     border-radius: 20px;
+    transition: background-color 0.2s ease;
+    transition: border 0.2s ease;
+    border: 2px solid transparent
+}
+
+.mcq-container-edit {
+    background-color: rgba(150, 150, 150, 0.25);
+    border: 2px solid rgba(100, 0, 0, 0.5);
+    transition: background-color 0.2s ease;
+    transition: border 0.2s ease;
 }
 
 .mcq-container:focus {

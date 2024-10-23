@@ -177,10 +177,11 @@ const MCQMenu = ({ showMCQMenu, handleShowMCQMenu, chooseAndAsk, handleChooseAnd
                 <div style={{
                     display: 'flex',
                     width: '500px',
-                    height: '50px'
+                    height: '30px'
                 }}>
                     <button onClick={onClickAddMCQ}
                         className='mcq-button'
+                        style={{ borderRadius: '2px', height: '30px', backgroundColor: 'rgba(230,230,230,0.7)', color: 'rgba(300,0,50)' }}
                     >add mcq</button>
                 </div>
                 {isEditID === 1 && isInputMCQ && <MCQEdit mcq={inputMCQ} handleClickEdit={handleClickEdit} handleClickDelete={handleClickDelete} handleCancel={handleCancel} handleSave={handleSave} isEditID={isEditID}></MCQEdit>}

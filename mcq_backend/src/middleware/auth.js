@@ -8,8 +8,6 @@ const auth = async function (req, res, next) {
 
         token = req.cookies.jwt
 
-
-
         if (!token) {
             console.log('mkc')
             throw new Error('no token provided')
@@ -23,7 +21,9 @@ const auth = async function (req, res, next) {
             throw new Error('User Not Authenticated')
         }
 
-        req.user = user
+        if (user)
+
+            req.user = user
 
 
 
